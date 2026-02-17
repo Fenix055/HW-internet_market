@@ -37,14 +37,17 @@ public class ProductBasket {
             System.out.println("В корзине пусто");
             return;
         }
+        int special = 0;
         for (Product added : basket) {
             if (added != null) {
-                System.out.println(added.getName() + ": " + added.getPrice());
+                System.out.println(added.toString());
+                if (added.isSpecial()) special++;
             } else {
                 break;
             }
         }
         System.out.println("Итого: " + sumPrice());
+        System.out.println("Специальных товаров: " + special);
     }
 
     public boolean nameChek (String name) {

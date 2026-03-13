@@ -1,10 +1,9 @@
 package org.skypro.skyshop;
 
 import org.skypro.skyshop.basket.ProductBasket;
-import org.skypro.skyshop.product.DiscountedProduct;
-import org.skypro.skyshop.product.FixPriceProduct;
-import org.skypro.skyshop.product.Product;
-import org.skypro.skyshop.product.SimpleProduct;
+import org.skypro.skyshop.product.*;
+
+import java.util.Arrays;
 
 public class App {
     public static void main(String[] args) {
@@ -32,5 +31,27 @@ public class App {
         basket.list();
         System.out.println(basket.sumPrice());
         System.out.println(basket.nameChek("Ex1"));
+
+
+        /// /////////////////////////////////////////////////////////
+
+
+        SearchEngine toSearch = new SearchEngine(5);
+
+        toSearch.add(example1);
+        toSearch.add(example2);
+        toSearch.add(example3);
+        toSearch.add(example4);
+        toSearch.add(example5);
+        toSearch.add(example6);
+
+        Article article1 = new Article("Ar1", "Ar1text");
+        Article article2 = new Article("Ar2", "Ar2text");
+
+        toSearch.add(article1);
+        toSearch.add(article2);
+
+        System.out.println(Arrays.toString(toSearch.search("Ar1Ar2Ar3")));
+        System.out.println(Arrays.toString(toSearch.search("Ex1Ex2Ex3")));
     }
 }

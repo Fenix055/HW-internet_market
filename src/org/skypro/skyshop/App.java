@@ -54,6 +54,9 @@ public class App {
         System.out.println(Arrays.toString(toSearch.search("Ar1Ar2Ar3")));
         System.out.println(Arrays.toString(toSearch.search("Ex1Ex2Ex3")));
 
+
+        /// /////////////////////////////////////////////////////////////
+
         Article abc = new Article("a","b");
         System.out.println(abc.toString());
         abc.getStringRepresentation();

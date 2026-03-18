@@ -11,9 +11,8 @@ public final class Article implements Searchable{
 
     @Override
     public String toString() {
-        return name + '\'' + text;
+        return name + '\n' + text;
     }
-
     public String getSearchableName() {return name;}
     public String getSearchableType() {return "Article";};
     public String getSearchableTerm() {return toString();};

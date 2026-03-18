@@ -11,11 +11,11 @@ public class SearchEngine {
         short x = 0;
         Searchable[] finded = new Searchable[5];
         for (Searchable searchable : searchables){
-            if (searchable == null) return finded;
+            if (searchable == null) continue;
             if (text.contains(searchable.getSearchableTerm())){
                 finded[x] = searchable;
                 x++;
-                if (x == 4) return finded;
+                if (x == 5) return finded;
             }
         }
         return finded;

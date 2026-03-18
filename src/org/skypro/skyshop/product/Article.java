@@ -1,8 +1,8 @@
 package org.skypro.skyshop.product;
 
 public final class Article implements Searchable{
-    String name;
-    String text;
+    private final String name;
+    private final String text;
 
     public Article(String name, String text) {
         this.name = name;
@@ -13,7 +13,10 @@ public final class Article implements Searchable{
     public String toString() {
         return name + '\n' + text;
     }
+    @Override
     public String getSearchableName() {return name;}
-    public String getSearchableType() {return "Article";};
+    @Override
+    public String getSearchableType() {return "ARTICLE";};
+    @Override
     public String getSearchableTerm() {return toString();};
 }

@@ -70,7 +70,12 @@ public class App {
         catch (IllegalArgumentException text){
             System.out.println(text);
         }
+        try {
+            System.out.println(toSearch.getSearchTerm("Ex3"));
+            System.out.println(toSearch.getSearchTerm("AAAA"));
+        } catch (BestResultNotFound text) {
+            System.out.println(text);
+        }
 
-        System.out.println(toSearch.getSearchTerm("Ex3"));
     }
 }

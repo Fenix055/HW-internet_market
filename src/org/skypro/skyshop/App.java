@@ -61,5 +61,16 @@ public class App {
         System.out.println(abc.toString());
         abc.getStringRepresentation();
 
+        /// ////////////////////////////////////////////////////////////
+
+        try {
+            SimpleProduct testProduct = new SimpleProduct("   ", 0);
+            DiscountedProduct testDiscounted = new DiscountedProduct("   ", 0, 101);
+        }
+        catch (IllegalArgumentException text){
+            System.out.println(text);
+        }
+
+        System.out.println(toSearch.getSearchTerm("Ex3"));
     }
 }

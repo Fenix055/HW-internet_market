@@ -35,4 +35,27 @@ public class SearchEngine {
         searchables=newSearchables;
         add(newSearchable);
     }
+
+    public Searchable getSearchTerm (String search){
+        search = search.toLowerCase();
+        int[] result = new int[searchables.length];
+
+        for (int i = 0; i < searchables.length; i++){
+            if (searchables[i]!=null) {
+                if (searchables[i].getSearchableName().toLowerCase().contains(search)) {
+                    result[i] = searchables[i].getSearchableName().length() - search.length() + 1;
+                }
+            }
+        }
+
+        int best = 0;
+
+        for (int i = 0; i < result.length; i++){
+            if (result[i]>0 && (result[i]<result[best] || best == 0)){
+                best = i;
+            }
+        }
+
+        return searchables[best];
+    }
 }

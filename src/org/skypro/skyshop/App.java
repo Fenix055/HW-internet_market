@@ -3,6 +3,7 @@ package org.skypro.skyshop;
 import org.skypro.skyshop.basket.ProductBasket;
 import org.skypro.skyshop.product.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class App {
@@ -27,7 +28,6 @@ public class App {
         System.out.println(basket.sumPrice());
         System.out.println(basket.nameChek("Ex1"));
         System.out.println(basket.nameChek("Ex7"));
-        basket.clear();
         basket.list();
         System.out.println(basket.sumPrice());
         System.out.println(basket.nameChek("Ex1"));
@@ -36,7 +36,7 @@ public class App {
         /// /////////////////////////////////////////////////////////
 
 
-        SearchEngine toSearch = new SearchEngine(5);
+        SearchEngine toSearch = new SearchEngine();
 
         toSearch.add(example1);
         toSearch.add(example2);
@@ -51,8 +51,8 @@ public class App {
         toSearch.add(article1);
         toSearch.add(article2);
 
-        System.out.println(Arrays.toString(toSearch.search("Ar1Ar2Ar3")));
-        System.out.println(Arrays.toString(toSearch.search("Ex1Ex2Ex3")));
+        System.out.println(toSearch.search("Ar1Ar2Ar3").toString());
+        System.out.println(toSearch.search("Ex1Ex2Ex3").toString());
 
 
         /// /////////////////////////////////////////////////////////////
@@ -76,6 +76,13 @@ public class App {
         } catch (BestResultNotFound text) {
             System.out.println(text);
         }
+
+        /// //////////////////////////////////////////////////////////////
+
+        System.out.println(basket.clearByName("Ex1"));
+        basket.printBasket();
+        if (basket.clearByName("Ex900").isEmpty()) System.out.println("Список пуст");
+        basket.printBasket();
 
     }
 }

@@ -2,23 +2,14 @@ package org.skypro.skyshop.basket;
 
 import org.skypro.skyshop.product.Product;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+
 public class ProductBasket {
-    private Product[] basket = new Product[5];
+    private final LinkedList<Product> basket = new LinkedList<>();
 
     public void addProduct(Product product) {
-        for (int i = 0; i < basket.length; i++) {
-            if (basket[i] == null) {
-                basket[i] = product;
-                return;
-            }
-        }
-        System.out.println("Невозможно добавить продукт.");
-        Product[] newBasket = new Product[basket.length + 5];
-        for (int i = 0; i < basket.length; i++) {
-            newBasket[i] = basket[i];
-        }
-        basket = newBasket;
-        addProduct(product);
+        basket.add(product);
     }
 
     public int sumPrice() {
@@ -33,7 +24,7 @@ public class ProductBasket {
     }
 
     public void list() {
-        if (basket[0] == null){
+        if (basket.isEmpty()){
             System.out.println("В корзине пусто");
             return;
         }
@@ -55,23 +46,35 @@ public class ProductBasket {
             if (added == null){
                 return false;
             }
-            if (added.getName() == name) {
+            if (added.getName().equals(name)) {
                 return true;
             }
         }
         return false;
     }
 
-    public void clear () {
-        if (basket[0] == null){
-            return;
-        }
-        for (int i = 0; i < basket.length; i++) {
-            if (basket[i] != null) {
-                basket[i] = null;
-            } else {
-                break;
+    public void fullClear () {
+        basket.clear();
+    }
+
+    public LinkedList<Product> clearByName (String name) {
+        LinkedList <Product> deletedProducts = new LinkedList<>();
+        Iterator <Product> iterator = basket.iterator();
+        while (iterator.hasNext()) {
+            Product product = iterator.next();
+            if (product.getName().equals(name)){
+                deletedProducts.add(product);
+                iterator.remove();
             }
+        }
+        return deletedProducts;
+    }
+
+    public void printBasket () {
+        int x = 1;
+        for (Product product : basket){
+            System.out.println("Номер " + x + " - " + product.getName()+ " цена " + product.getPrice());
+            x++;
         }
     }
 

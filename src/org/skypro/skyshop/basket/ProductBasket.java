@@ -2,23 +2,22 @@ package org.skypro.skyshop.basket;
 
 import org.skypro.skyshop.product.Product;
 
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class ProductBasket {
-    private final LinkedList<Product> basket = new LinkedList<>();
+    private final Map <Product, Integer> basket = new LinkedHashMap<>();
 
     public void addProduct(Product product) {
-        basket.add(product);
+        if (basket.containsKey(product)){
+            basket.computeIfPresent(product, (k, v) -> v + 1);
+        } else { basket.put(product, 1); }
     }
 
     public int sumPrice() {
         int sum = 0;
-        for (Product added : basket) {
-            if (added == null){
-                break;
-            }
-            sum += added.getPrice();
+        for (Map.Entry<Product, Integer> entry : basket.entrySet()) {
+            sum += entry.getKey().getPrice() * entry.getValue();
         }
         return sum;
     }
@@ -29,10 +28,10 @@ public class ProductBasket {
             return;
         }
         int special = 0;
-        for (Product added : basket) {
-            if (added != null) {
-                System.out.println(added.toString());
-                if (added.isSpecial()) special++;
+        for (Map.Entry<Product, Integer> entry : basket.entrySet()) {
+            if (entry != null) {
+                System.out.println(entry.getKey().toString());
+                if (entry.getKey().isSpecial()) special++;
             } else {
                 break;
             }
@@ -42,11 +41,8 @@ public class ProductBasket {
     }
 
     public boolean nameChek (String name) {
-        for (Product added : basket) {
-            if (added == null){
-                return false;
-            }
-            if (added.getName().equals(name)) {
+        for (Map.Entry<Product, Integer> entry : basket.entrySet()) {
+            if (entry.getKey().getName().equals(name)) {
                 return true;
             }
         }
@@ -57,14 +53,13 @@ public class ProductBasket {
         basket.clear();
     }
 
-    public LinkedList<Product> clearByName (String name) {
-        LinkedList <Product> deletedProducts = new LinkedList<>();
-        Iterator <Product> iterator = basket.iterator();
-        while (iterator.hasNext()) {
-            Product product = iterator.next();
-            if (product.getName().equals(name)){
-                deletedProducts.add(product);
-                iterator.remove();
+    public Map<Product, Integer> clearByName (String name) {
+        Map <Product, Integer> deletedProducts = new LinkedHashMap<>();
+        for (Map.Entry<Product, Integer> entry : basket.entrySet()) {
+            if (entry.getKey().getName().equals(name)){
+                deletedProducts.put(entry.getKey(), entry.getValue());
+                basket.remove(entry.getKey());
+                return deletedProducts;
             }
         }
         return deletedProducts;
@@ -72,8 +67,8 @@ public class ProductBasket {
 
     public void printBasket () {
         int x = 1;
-        for (Product product : basket){
-            System.out.println("Номер " + x + " - " + product.getName()+ " цена " + product.getPrice());
+        for (Map.Entry<Product, Integer> entry : basket.entrySet()) {
+            System.out.println("Номер " + x + " - " + entry.getKey().getName() + " в количестве " + entry.getValue() + " по цене " + entry.getKey().getPrice() + " всего " + entry.getKey().getPrice() * entry.getValue());
             x++;
         }
     }

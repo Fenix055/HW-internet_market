@@ -1,50 +1,47 @@
 package org.skypro.skyshop.product;
 
-import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class SearchEngine {
-    ArrayList<Searchable> searchables = new ArrayList<>();
+    Map <String, Searchable> searchables = new TreeMap<>();
 
-    public ArrayList<Searchable> search(String text) {
-        ArrayList <Searchable> finded = new ArrayList<>();
-        for (Searchable searchable : searchables) {
-            if (searchable.getSearchableName().equals(text)){
-                finded.add(searchable);
+    public Map<String, Searchable> search(String text) {
+        Map <String, Searchable> finded = new TreeMap<>();
+        for (Map.Entry<String, Searchable> entry : searchables.entrySet()) {
+            if (entry.getKey().equals(text)){
+                finded.put(entry.getKey(), entry.getValue());
             }
         }
         return finded;
     }
 
     public void add(Searchable newSearchable) {
-        searchables.add(newSearchable);
+        searchables.put(newSearchable.getSearchableName(), newSearchable);
     }
 
     public Searchable getSearchTerm(String search) throws BestResultNotFound {
         search = search.toLowerCase();
-        int[] result = new int[searchables.size()];
+        Searchable best = null;
+        int bestSize = 2147483647;
 
-        for (int i = 0; i < searchables.size(); i++) {
-            if (searchables.get(i) != null) {
-                if (searchables.get(i).getSearchableName().toLowerCase().contains(search)) {
-                    result[i] = searchables.get(i).getSearchableName().length() - search.length() + 1;
+        for (Map.Entry<String, Searchable> entry : searchables.entrySet()) {
+            if (entry.getKey().toLowerCase().contains(search)){
+                if (best == null){
+                    best = entry.getValue();
+                    bestSize = entry.getKey().length() - search.length();
+                } else {
+                    if (bestSize > entry.getKey().length() - search.length()){
+                        best = entry.getValue();
+                        bestSize = entry.getKey().length() - search.length();
+                    }
                 }
             }
         }
 
-        int best = -1;
 
-        for (int i = 0; i < result.length; i++) {
-            if (result[i] > 0) {
-                if (best == -1) {
-                    best = i;
-                }
-                if (result[i] < result[best]){
-                    best = i;
-                }
-            }
-        }
-        if (best >= 0) {
-            return searchables.get(best);
+        if (best != null) {
+            return best;
         } else {
             throw new BestResultNotFound(search + " не найден.");
         }

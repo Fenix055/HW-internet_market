@@ -8,5 +8,5 @@ public interface Searchable {
 
     default void getStringRepresentation(){
         System.out.println("имя " + getSearchableName() + " - тип " + getSearchableType());
-    };
+    }
 }

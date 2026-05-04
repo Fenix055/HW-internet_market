@@ -51,8 +51,8 @@ public class App {
         toSearch.add(article1);
         toSearch.add(article2);
 
-        System.out.println(toSearch.search("Ar1Ar2Ar3").toString());
-        System.out.println(toSearch.search("Ex1Ex2Ex3").toString());
+        toSearch.search("Ar1").getStringRepresentation();;
+        toSearch.search("Ex1").getStringRepresentation();
 
 
         /// /////////////////////////////////////////////////////////////

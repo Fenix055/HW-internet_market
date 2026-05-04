@@ -1,23 +1,19 @@
 package org.skypro.skyshop.product;
 
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.Set;
+import java.util.HashSet;
 
 public class SearchEngine {
-    Map <String, Searchable> searchables = new TreeMap<>();
+    Set <Searchable> searchables = new HashSet<>();
 
-    public Map<String, Searchable> search(String text) {
-        Map <String, Searchable> finded = new TreeMap<>();
-        for (Map.Entry<String, Searchable> entry : searchables.entrySet()) {
-            if (entry.getKey().equals(text)){
-                finded.put(entry.getKey(), entry.getValue());
-            }
-        }
+    public Searchable search(String text) {
+        Searchable finded = searchables.stream().filter(Searchable -> text.equals(Searchable.getSearchableName())).findFirst().orElse(null);
+
         return finded;
     }
 
     public void add(Searchable newSearchable) {
-        searchables.put(newSearchable.getSearchableName(), newSearchable);
+        searchables.add(newSearchable);
     }
 
     public Searchable getSearchTerm(String search) throws BestResultNotFound {
@@ -25,15 +21,15 @@ public class SearchEngine {
         Searchable best = null;
         int bestSize = 2147483647;
 
-        for (Map.Entry<String, Searchable> entry : searchables.entrySet()) {
-            if (entry.getKey().toLowerCase().contains(search)){
+        for (Searchable entry : searchables) {
+            if (entry.getSearchableName().toLowerCase().contains(search)){
                 if (best == null){
-                    best = entry.getValue();
-                    bestSize = entry.getKey().length() - search.length();
+                    best = entry;
+                    bestSize = entry.getSearchableName().length() - search.length();
                 } else {
-                    if (bestSize > entry.getKey().length() - search.length()){
-                        best = entry.getValue();
-                        bestSize = entry.getKey().length() - search.length();
+                    if (bestSize > entry.getSearchableName().length() - search.length()){
+                        best = entry;
+                        bestSize = entry.getSearchableName().length() - search.length();
                     }
                 }
             }

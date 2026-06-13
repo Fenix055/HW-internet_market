@@ -28,12 +28,14 @@ public abstract class Product implements Searchable{
     public String getSearchableTerm() {return name;};
 
     @Override
-    public int hashCode() {return Objects.hash();}
-    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Product that = (Product) o;
-        return hashCode() == that.hashCode() && Objects.equals(name, that.name);
+        Product product = (Product) o;
+        return Objects.equals(name, product.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(name);
     }
 }

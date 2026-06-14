@@ -4,6 +4,10 @@ import org.skypro.skyshop.product.Product;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Collections;
+import java.util.stream.IntStream;
+import java.util.ArrayList;
 
 public class ProductBasket {
     private final Map <Product, Integer> basket = new LinkedHashMap<>();
@@ -15,11 +19,8 @@ public class ProductBasket {
     }
 
     public int sumPrice() {
-        int sum = 0;
-        for (Map.Entry<Product, Integer> entry : basket.entrySet()) {
-            sum += entry.getKey().getPrice() * entry.getValue();
-        }
-        return sum;
+        return basket.entrySet().stream()
+                .mapToInt(entry -> entry.getKey().getPrice() * entry.getValue()).sum();
     }
 
     public void list() {
@@ -27,26 +28,17 @@ public class ProductBasket {
             System.out.println("В корзине пусто");
             return;
         }
-        int special = 0;
-        for (Map.Entry<Product, Integer> entry : basket.entrySet()) {
-            if (entry != null) {
-                System.out.println(entry.getKey().toString());
-                if (entry.getKey().isSpecial()) special++;
-            } else {
-                break;
-            }
-        }
+        int special = basket.entrySet().stream()
+                .filter(Objects::nonNull)
+                .peek(entry -> System.out.println(entry.getKey().toString()))
+                .mapToInt(entry -> entry.getKey().isSpecial() ? 1 : 0)
+                .sum();
         System.out.println("Итого: " + sumPrice());
         System.out.println("Специальных товаров: " + special);
     }
 
     public boolean nameChek (String name) {
-        for (Map.Entry<Product, Integer> entry : basket.entrySet()) {
-            if (entry.getKey().getName().equals(name)) {
-                return true;
-            }
-        }
-        return false;
+        return basket.entrySet().stream().anyMatch(entry -> entry.getKey().getName().equals(name));
     }
 
     public void fullClear () {
@@ -54,23 +46,30 @@ public class ProductBasket {
     }
 
     public Map<Product, Integer> clearByName (String name) {
-        Map <Product, Integer> deletedProducts = new LinkedHashMap<>();
-        for (Map.Entry<Product, Integer> entry : basket.entrySet()) {
-            if (entry.getKey().getName().equals(name)){
-                deletedProducts.put(entry.getKey(), entry.getValue());
-                basket.remove(entry.getKey());
-                return deletedProducts;
-            }
-        }
-        return deletedProducts;
+        return basket.entrySet().stream()
+                .filter(entry -> entry.getKey().getName().equals(name))
+                .findFirst()
+                .map(entry -> {
+                    basket.remove(entry.getKey());
+                    return Map.of(entry.getKey(), entry.getValue());
+                })
+                .orElse(Collections.emptyMap());
     }
 
     public void printBasket () {
-        int x = 1;
-        for (Map.Entry<Product, Integer> entry : basket.entrySet()) {
-            System.out.println("Номер " + x + " - " + entry.getKey().getName() + " в количестве " + entry.getValue() + " по цене " + entry.getKey().getPrice() + " всего " + entry.getKey().getPrice() * entry.getValue());
-            x++;
-        }
+        var entries = new ArrayList<>(basket.entrySet());
+
+        IntStream.range(0, entries.size())
+                .forEach(i -> {
+                    var entry = entries.get(i);
+                    var product = entry.getKey();
+                    System.out.printf("Номер %d - %s в количестве %d по цене %d всего %d%n",
+                            i + 1,
+                            product.getName(),
+                            entry.getValue(),
+                            product.getPrice(),
+                            product.getPrice() * entry.getValue());
+                });
     }
 
 

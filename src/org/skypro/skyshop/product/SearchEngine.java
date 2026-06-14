@@ -1,27 +1,25 @@
 package org.skypro.skyshop.product;
 
-import java.util.Set;
-import java.util.HashSet;
-import java.util.TreeSet;
-import java.util.Comparator;
+import java.util.*;
 
 public class SearchEngine {
     Set <Searchable> searchables = new HashSet<>();
 
     public Set<String> search(String text) {
-        Searchable[] finded = new Searchable[5];
-        Searchable newFinded = searchables.stream().filter(Searchable -> text.equals(Searchable.getSearchableName())).findFirst().orElse(null);
-
-        for (short i = 0; i<5; i++)
-            if (finded[i]==null) finded[i] = newFinded;
-
-        Set<String> sortFinded = new TreeSet<>(Comparator.comparingInt(String::length).thenComparing(Comparator.naturalOrder()));
-        for (short i = 0; i < 5; i++)
-            if (finded[i] != null) {
-                sortFinded.add(("имя " + finded[i].getSearchableName() + " - тип " + finded[i].getSearchableType()));
-            }
-        return sortFinded;
+        return searchables.stream()
+                .filter(s -> text.equals(s.getSearchableName()))
+                .findFirst()
+                .map(newFinded -> java.util.stream.Stream.generate(() -> newFinded)
+                        .limit(5)
+                        .map(s -> "имя " + s.getSearchableName() + " - тип " + s.getSearchableType())
+                        .collect(java.util.stream.Collectors.toCollection(() -> new java.util.TreeSet<>(
+                                java.util.Comparator.comparingInt(String::length).thenComparing(java.util.Comparator.naturalOrder())
+                        ))))
+                .orElseGet(java.util.TreeSet::new);
     }
+
+
+
 
     public void add(Searchable newSearchable) {
         searchables.add(newSearchable);
